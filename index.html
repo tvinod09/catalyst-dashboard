@@ -19,6 +19,7 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,sa
 .main{padding:20px 24px;max-width:1500px;margin:0 auto}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
 .g7{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-bottom:16px}
+.g8{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin-bottom:16px}
 .g2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
 .g22{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 @media(max-width:1100px){.g7{grid-template-columns:repeat(4,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
@@ -48,6 +49,7 @@ body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,sa
 .ag.ae::before{background:linear-gradient(90deg,#8b5cf6,#6366f1)}
 .ag.az::before{background:linear-gradient(90deg,#10b981,#06b6d4)}
 .ag.aet::before{background:linear-gradient(90deg,#f43f5e,#ef4444)}
+.ag.ath::before{background:linear-gradient(90deg,#00d4ff,#0080ff)}
 .at{display:flex;justify-content:space-between;align-items:flex-start}
 .an{font-size:14px;font-weight:800}
 .ar{font-size:10px;color:var(--mt);margin-top:1px}
@@ -135,7 +137,7 @@ tr:hover td{background:rgba(59,130,246,.03)}
 </div>
 
 <div class="sect">🤖 Agent Status &amp; Points</div>
-<div class="g7" id="agentGrid">
+<div class="g8" id="agentGrid">
   <div class="ag aa"><div class="at"><div><div class="an">📈 Analyst</div><div class="ar">Idea Generation</div></div><div><div class="ap" id="ptAlpha">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av vg" id="wAlpha">0</div><div class="al">Wins</div></div><div><div class="av vr" id="lAlpha">0</div><div class="al">Losses</div></div><div><div class="av" id="cAlpha">0</div><div class="al">🏆</div></div></div></div>
   <div class="ag ab"><div class="at"><div><div class="an">✅ Reviewer</div><div class="ar">Trade Approval</div></div><div><div class="ap" id="ptBeta">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av vg" id="wBeta">0</div><div class="al">Approved</div></div><div><div class="av vr" id="lBeta">0</div><div class="al">Rejected</div></div><div><div class="av" id="cBeta">0</div><div class="al">🏆</div></div></div></div>
   <div class="ag agm"><div class="at"><div><div class="an">🎯 Manager</div><div class="ar">Position Manager</div></div><div><div class="ap" id="ptGamma">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av" id="wGamma">0</div><div class="al">Exits</div></div><div><div class="av" id="lGamma">0</div><div class="al">Trails</div></div><div><div class="av" id="cGamma">0</div><div class="al">🏆</div></div></div></div>
@@ -143,6 +145,7 @@ tr:hover td{background:rgba(59,130,246,.03)}
   <div class="ag ae"><div class="at"><div><div class="an">🛡️ Risk Guard</div><div class="ar">Risk &amp; Sizing</div></div><div><div class="ap" id="ptEpsilon">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av" id="wEpsilon">—</div><div class="al">Risk Score</div></div><div><div class="av" id="lEpsilon">0</div><div class="al">Blocks</div></div><div><div class="av" id="cEpsilon">0</div><div class="al">🏆</div></div></div></div>
   <div class="ag az"><div class="at"><div><div class="an">🌍 Macro</div><div class="ar">Economy &amp; Calendar</div></div><div><div class="ap" id="ptZeta">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av" id="wZeta">0</div><div class="al">Warnings</div></div><div><div class="av" id="lZeta">—</div><div class="al">Regime</div></div><div><div class="av" id="cZeta">0</div><div class="al">🏆</div></div></div></div>
   <div class="ag aet"><div class="at"><div><div class="an">📊 Scorekeeper</div><div class="ar">Performance</div></div><div><div class="ap" id="ptEta">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av" id="wEta">0</div><div class="al">Reports</div></div><div><div class="av" id="lEta">—</div><div class="al">Sharpe</div></div><div><div class="av" id="cEta">0</div><div class="al">🏆</div></div></div></div>
+  <div class="ag ath"><div class="at"><div><div class="an">⚡ Executor</div><div class="ar">Trade Execution</div></div><div><div class="ap" id="ptTheta">0</div><div class="apl">weekly pts</div></div></div><div class="ab2"><div><div class="av vg" id="wTheta">0</div><div class="al">Proceed</div></div><div><div class="av vr" id="lTheta">0</div><div class="al">Killed</div></div><div><div class="av" id="cTheta">—</div><div class="al">Avg Fill</div></div></div></div>
 </div>
 
 <div class="g2">
@@ -222,7 +225,7 @@ async function loadDeskData() {
     $('pnlPct').textContent   = pct((pnl / 15000) * 100) + ' vs starting capital';
     $('pnlPct').className     = 'sc ' + (pnl >= 0 ? 'u' : 'd');
     $('posCount').textContent  = p.open_count ?? 0;
-    $('tradeCount').textContent = 'Total closed trades: ' + (p.total_trades ?? 0);
+    $('tcnt').textContent = 'Total closed trades: ' + (p.total_trades ?? 0);
 
     const sent = d.sentiment || {};
     if (sent.market_regime) $('regimeBadge').textContent = sent.market_regime;
