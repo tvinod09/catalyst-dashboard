@@ -232,17 +232,17 @@ async function loadDeskData() {
     }
 
     const agents = d.agents || {};
-    const agNames = ['Alpha','Beta','Gamma','Delta','Epsilon','Zeta','Eta'];
+    const agNames = ['Alpha','Beta','Gamma','Delta','Epsilon','Zeta','Eta','Theta'];
     let maxPts = 1;
     agNames.forEach(n => { if (agents[n]) maxPts = Math.max(maxPts, agents[n].weekly_points || 0); });
     agNames.forEach(name => {
       const a = agents[name] || {};
       if($('pt'+name)) $('pt'+name).textContent = a.weekly_points || 0;
-      const wVals = {Alpha:a.wins,Beta:a.approved,Gamma:a.exits,Delta:a.alerts,Epsilon:a.risk_score,Zeta:a.warnings,Eta:a.reports};
-      const lVals = {Alpha:a.losses,Beta:a.rejected,Gamma:a.trailing_stops,Delta:a.blocks,Epsilon:a.blocks,Zeta:'--',Eta:'--'};
+      const wVals = {Alpha:a.wins,Beta:a.approved,Gamma:a.exits,Delta:a.alerts,Epsilon:a.risk_score,Zeta:a.warnings,Eta:a.reports,Theta:a.executions};
+      const lVals = {Alpha:a.losses,Beta:a.rejected,Gamma:a.trailing_stops,Delta:a.blocks,Epsilon:a.blocks,Zeta:'--',Eta:'--',Theta:a.holds};
       if($('w'+name)) $('w'+name).textContent = wVals[name] ?? 0;
       if($('l'+name)) $('l'+name).textContent = lVals[name] ?? 0;
-      if($('c'+name)) $('c'+name).textContent = a.championships || 0;
+      if($('c'+name)) $('c'+name).textContent = name==='Theta' ? (a.avg_quality||'--') : (a.championships||0);
     });
 
     if (d.champion && d.champion !== 'TBD') {
