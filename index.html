@@ -215,6 +215,24 @@ tr:hover td{background:rgba(59,130,246,.03)}
   </div>
 </div>
 
+<div class="sect">📋 Reports &amp; Summaries</div>
+<div class="card" style="margin-bottom:16px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="display:flex;gap:6px" id="reportTabs">
+      <button class="tab active" onclick="filterReports('all')">All</button>
+      <button class="tab" onclick="filterReports('morning')">🌅 Morning</button>
+      <button class="tab" onclick="filterReports('midday'">☀️ Mid-Day</button>
+      <button class="tab" onclick="filterReports('daily')">📊 Daily</button>
+      <button class="tab" onclick="filterReports('weekly')">📅 Weekly</button>
+      <button class="tab" onclick="filterReports('postmortem')">🔬 Post-Mortem</button>
+    </div>
+    <div style="font-size:10px;color:var(--mt)" id="reportCount"></div>
+  </div>
+  <div id="reportsPanel">
+    <div class="empty"><div class="ei">📋</div><div>No reports yet</div><div style="font-size:11px;margin-top:4px;color:var(--mt)">Morning briefings, daily reports and weekly summaries appear here</div></div>
+  </div>
+</div>
+
 <div class="note">⚡ Catalyst Trading Desk · Live prices from CoinGecko & Alternative.me · Auto-refreshes every 60s · Built by Catalyst</div>
 </div>
 
@@ -337,6 +355,12 @@ async function loadDeskData() {
       $('deskUpdated').textContent = 'Desk: ' + new Date(d.generated_at).toLocaleTimeString();
     }
 
+    // Reports
+    if (d.reports) {
+      allReports = d.reports;
+      renderReports();
+    }
+
     // Agent Activity Log
     const actEl = $('agentActivityLog');
     const actLines = d.agent_activity || [];
@@ -415,6 +439,53 @@ async function loadPrices() {
   $('priceUpdated').textContent = 'Prices: '+new Date().toLocaleTimeString();
 }
 
+
+// Reports
+let allReports = [];
+let activeReportFilter = 'all';
+
+function filterReports(type) {
+  activeReportFilter = type;
+  document.querySelectorAll('#reportTabs .tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderReports();
+}
+
+function renderReports() {
+  const el = $('reportsPanel');
+  const countEl = $('reportCount');
+  if (!allReports || allReports.length === 0) {
+    el.innerHTML = '<div class="empty"><div class="ei">📋</div><div>No reports yet</div><div style="font-size:11px;margin-top:4px;color:var(--mt)">Morning briefings, daily reports and weekly summaries appear here</div></div>';
+    if (countEl) countEl.textContent = '';
+    return;
+  }
+  const filtered = activeReportFilter === 'all' ? allReports : allReports.filter(r => r.type === activeReportFilter);
+  if (countEl) countEl.textContent = filtered.length + ' report' + (filtered.length !== 1 ? 's' : '');
+  if (filtered.length === 0) {
+    el.innerHTML = '<div class="empty"><div style="padding:16px;color:var(--mt)">No ' + activeReportFilter + ' reports yet</div></div>';
+    return;
+  }
+  const typeEmoji = {morning:'🌅',midday:'☀️',daily:'📊',weekly:'📅',postmortem:'🔬',log:'📝'};
+  const typeColor = {morning:'#f59e0b',midday:'#06b6d4',daily:'#3b82f6',weekly:'#8b5cf6',postmortem:'#f43f5e',log:'#64748b'};
+  el.innerHTML = filtered.map(r => {
+    const em = typeEmoji[r.type] || '📋';
+    const col = typeColor[r.type] || '#64748b';
+    const preview = (r.preview || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return '<div style="border:1px solid var(--bd);border-radius:8px;padding:12px 14px;margin-bottom:10px;cursor:pointer" onclick="this.querySelector('.rp-body').style.display=this.querySelector('.rp-body').style.display==='none'?'block':'none'">' +
+      '<div style="display:flex;align-items:center;gap:10px;justify-content:space-between">' +
+        '<div style="display:flex;align-items:center;gap:8px">' +
+          '<span style="font-size:16px">' + em + '</span>' +
+          '<div>' +
+            '<div style="font-size:12px;font-weight:700;color:#e2e8f0">' + (r.title || r.filename) + '</div>' +
+            '<div style="font-size:10px;color:var(--mt);margin-top:2px">' + r.date + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:' + col + '22;color:' + col + '">' + (r.type||'log').toUpperCase() + '</span>' +
+      '</div>' +
+      '<div class="rp-body" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd);font-size:11px;color:#94a3b8;white-space:pre-wrap;line-height:1.6;max-height:300px;overflow-y:auto">' + preview + (r.preview && r.preview.length >= 600 ? '\n\n[... full report on disk]' : '') + '</div>' +
+    '</div>';
+  }).join('');
+}
 async function refreshAll() {
   await Promise.all([loadDeskData(), loadPrices()]);
   $('ts').textContent = 'Updated '+new Date().toLocaleTimeString();
