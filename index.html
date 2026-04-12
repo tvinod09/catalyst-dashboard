@@ -201,75 +201,175 @@ tr:hover td{background:rgba(59,130,246,.03)}
 </div>
 
 <script>
-const fmt = (n, d=2) => '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const pct = (n) => (n >= 0 ? '+' : '') + Number(n).toFixed(2) + '%';
+const DATA_URL = 'https://raw.githubusercontent.com/tvinod09/catalyst-dashboard/gh-pages/data.json';
+const $ = id => document.getElementById(id);
+const fmt = (n,d=2) => '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct = n => (n>=0?'+':'')+Number(n).toFixed(2)+'%';
+
+async function loadDeskData() {
+  try {
+    const r = await fetch(DATA_URL + '?_=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+    const p = d.portfolio || {};
+    const cash = p.cash ?? 15000;
+    const pnl  = p.realized_pnl ?? 0;
+    const tv   = p.total_value ?? cash;
+    $('totalVal').textContent = fmt(tv);
+    $('cashVal').textContent  = fmt(cash);
+    $('pnlVal').textContent   = (pnl >= 0 ? '+' : '') + fmt(Math.abs(pnl));
+    $('pnlVal').className     = 'sv ' + (pnl >= 0 ? 'g' : 'r');
+    $('pnlPct').textContent   = pct((pnl / 15000) * 100) + ' vs starting capital';
+    $('pnlPct').className     = 'sc ' + (pnl >= 0 ? 'u' : 'd');
+    $('posCount').textContent  = p.open_count ?? 0;
+    $('tradeCount').textContent = 'Total closed trades: ' + (p.total_trades ?? 0);
+
+    const sent = d.sentiment || {};
+    if (sent.market_regime) $('regimeBadge').textContent = sent.market_regime;
+    if (sent.fear_greed_value) {
+      $('pFG').textContent = sent.fear_greed_value + '/100';
+      $('cFG').textContent = sent.fear_greed_label || '';
+    }
+
+    const agents = d.agents || {};
+    const agNames = ['Alpha','Beta','Gamma','Delta','Epsilon','Zeta','Eta'];
+    let maxPts = 1;
+    agNames.forEach(n => { if (agents[n]) maxPts = Math.max(maxPts, agents[n].weekly_points || 0); });
+    agNames.forEach(name => {
+      const a = agents[name] || {};
+      if($('pt'+name)) $('pt'+name).textContent = a.weekly_points || 0;
+      const wVals = {Alpha:a.wins,Beta:a.approved,Gamma:a.exits,Delta:a.alerts,Epsilon:a.risk_score,Zeta:a.warnings,Eta:a.reports};
+      const lVals = {Alpha:a.losses,Beta:a.rejected,Gamma:a.trailing_stops,Delta:a.blocks,Epsilon:a.blocks,Zeta:'--',Eta:'--'};
+      if($('w'+name)) $('w'+name).textContent = wVals[name] ?? 0;
+      if($('l'+name)) $('l'+name).textContent = lVals[name] ?? 0;
+      if($('c'+name)) $('c'+name).textContent = a.championships || 0;
+    });
+
+    if (d.champion && d.champion !== 'TBD') {
+      agNames.forEach(name => {
+        const card = $('card'+name);
+        if (!card) return;
+        const ex = card.querySelector('.crown');
+        if (ex) ex.remove();
+        if (name === d.champion) {
+          const crown = document.createElement('div');
+          crown.className = 'crown';
+          crown.textContent = 'CHAMP';
+          card.appendChild(crown);
+        }
+      });
+    }
+
+    const sorted = agNames.map(n => ({n, pts:(agents[n]||{}).weekly_points||0})).sort((a,b)=>b.pts-a.pts);
+    const ranks = ['gold','silver','bronze','','','',''];
+    $('leaderboard').innerHTML = sorted.map((a,i) =>
+      `<div class="lb-r"><div class="lb-rk ${ranks[i]}">${i+1}</div><div class="lb-n">${a.n}</div><div class="lb-b"><div class="lb-f" style="width:${maxPts>0?(a.pts/maxPts*100).toFixed(0):0}%"></div></div><div class="lb-p">${a.pts}</div></div>`
+    ).join('');
+
+    const strats = d.strategy_health || {};
+    if (Object.keys(strats).length > 0) {
+      $('stratHealth').innerHTML = Object.entries(strats).map(([n,s]) => {
+        const sc = s.health_score ?? 100;
+        const bc = sc>=60?'sg':sc>=40?'sy':'srd';
+        const st = s.status||'ACTIVE';
+        return `<div class="sr"><div class="sn">${n}</div><div class="sb"><div class="sf ${bc}" style="width:${sc}%"></div></div><div class="sp">${sc}</div><div class="st ${st==='ACTIVE'?'a':'s'}">${st}</div></div>`;
+      }).join('');
+    }
+
+    const positions = p.open_positions || {};
+    const posEl = $('posTable');
+    if (Object.keys(positions).length === 0) {
+      posEl.innerHTML = '<div class="empty"><div class="ei">No open positions yet</div><div style="font-size:11px;margin-top:4px">First live cycle: Monday April 14, 9:30 AM ET</div></div>';
+    } else {
+      let rows = '<table><thead><tr><th>Ticker</th><th>Dir</th><th>Strategy</th><th>Entry</th><th>Stop</th><th>Target</th><th>Size</th><th>Opened</th></tr></thead><tbody>';
+      for (const [ticker,pos] of Object.entries(positions)) {
+        const dir=(pos.direction||'LONG').toUpperCase();
+        rows+=`<tr><td><strong>${ticker}</strong></td><td><span class="tag ${dir==='LONG'?'long':'short'}">${dir}</span></td><td>${pos.strategy||'--'}</td><td>${pos.entry_price?fmt(pos.entry_price):'--'}</td><td style="color:var(--rd)">${pos.stop_loss?fmt(pos.stop_loss):'--'}</td><td style="color:var(--gn)">${pos.target?fmt(pos.target):'--'}</td><td>${pos.cost_basis?fmt(pos.cost_basis,0):'--'}</td><td>${(pos.entry_time||'').substring(0,10)||'--'}</td></tr>`;
+      }
+      posEl.innerHTML = rows + '</tbody></table>';
+    }
+
+    const trades = p.recent_trades || [];
+    const thEl = $('tradeHistory');
+    if (trades.length === 0) {
+      thEl.innerHTML = '<div class="empty"><div class="ei">No closed trades yet</div><div style="font-size:11px;margin-top:4px">Trades appear here when agents close positions</div></div>';
+    } else {
+      let rows='<table><thead><tr><th>Closed</th><th>Ticker</th><th>Strategy</th><th>Dir</th><th>Entry</th><th>Exit</th><th>P&L</th><th>Result</th><th>Reason</th></tr></thead><tbody>';
+      rows += [...trades].reverse().map(t => {
+        const p2=t.pnl||0;
+        return `<tr><td>${(t.exit_time||'').substring(0,10)||'--'}</td><td><strong>${t.ticker||'?'}</strong></td><td>${t.strategy||'--'}</td><td><span class="tag ${(t.direction||'long').toLowerCase()==='long'?'long':'short'}">${(t.direction||'LONG').toUpperCase()}</span></td><td>${t.entry_price?fmt(t.entry_price):'--'}</td><td>${t.exit_price?fmt(t.exit_price):'--'}</td><td class="${p2>=0?'pnl-pos':'pnl-neg'}">${p2>=0?'+':''}${fmt(Math.abs(p2))}</td><td><span class="tag ${p2>=0?'win':'loss'}">${p2>=0?'WIN':'LOSS'}</span></td><td style="font-size:11px;color:var(--mt)">${t.close_reason||'--'}</td></tr>`;
+      }).join('');
+      thEl.innerHTML = rows + '</tbody></table>';
+    }
+
+    const ctrl = d.control || {};
+    const cp = $('ctrlStatus');
+    if (ctrl.override_mode === 'EMERGENCY') {
+      cp.textContent = 'EMERGENCY STOP ACTIVE -- All positions closing';
+      cp.style.color = 'var(--rd)';
+    } else if (ctrl.freeze_new_trades) {
+      cp.textContent = 'Trading PAUSED' + (ctrl.freeze_reason ? ' -- ' + ctrl.freeze_reason : '') + ' | Message Catalyst on Telegram to resume';
+      cp.style.color = 'var(--yw)';
+    } else {
+      cp.textContent = 'Trading ACTIVE | ' + (ctrl.override_mode||'NORMAL') + ' mode | Daily loss limit: $' + (ctrl.daily_loss_limit||500) + (ctrl.vinod_notes ? ' | Note: ' + ctrl.vinod_notes : '');
+      cp.style.color = 'var(--gn)';
+    }
+
+    if (d.generated_at) {
+      $('deskUpdated').textContent = 'Desk: ' + new Date(d.generated_at).toLocaleTimeString();
+    }
+  } catch(e) { console.warn('Desk data error:', e); }
+}
 
 async function loadPrices() {
   try {
     const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple,binancecoin&vs_currencies=usd&include_24hr_change=true');
     const d = await r.json();
-    const set = (id, priceEl, chgEl, val, chg) => {
-      document.getElementById(priceEl).textContent = fmt(val);
-      const el = document.getElementById(chgEl);
-      el.textContent = pct(chg) + ' 24h';
-      el.className = 'pc ' + (chg >= 0 ? 'u' : 'd');
+    const set = (pid,cid,val,chg) => {
+      $(pid).textContent = '$'+Number(val).toLocaleString('en-US',{maximumFractionDigits:val<1?4:2});
+      $(cid).textContent = (chg>=0?'+':'')+Number(chg).toFixed(2)+'% 24h';
+      $(cid).className = 'pc '+(chg>=0?'u':'d');
     };
-    if(d.bitcoin) set('btc','pBTC','cBTC',d.bitcoin.usd,d.bitcoin.usd_24h_change);
-    if(d.ethereum) set('eth','pETH','cETH',d.ethereum.usd,d.ethereum.usd_24h_change);
-    if(d.solana) set('sol','pSOL','cSOL',d.solana.usd,d.solana.usd_24h_change);
-    if(d.ripple) set('xrp','pXRP','cXRP',d.ripple.usd,d.ripple.usd_24h_change);
-    if(d.binancecoin) set('bnb','pBNB','cBNB',d.binancecoin.usd,d.binancecoin.usd_24h_change);
-  } catch(e) { console.log('Price error:',e); }
-
+    if(d.bitcoin)     set('pBTC','cBTC',d.bitcoin.usd,d.bitcoin.usd_24h_change);
+    if(d.ethereum)    set('pETH','cETH',d.ethereum.usd,d.ethereum.usd_24h_change);
+    if(d.solana)      set('pSOL','cSOL',d.solana.usd,d.solana.usd_24h_change);
+    if(d.ripple)      set('pXRP','cXRP',d.ripple.usd,d.ripple.usd_24h_change);
+    if(d.binancecoin) set('pBNB','cBNB',d.binancecoin.usd,d.binancecoin.usd_24h_change);
+  } catch(e){}
   try {
-    const r2 = await fetch('https://api.coingecko.com/api/v3/global');
-    const g = await r2.json();
-    if(g.data) {
-      const mc = g.data.total_market_cap?.usd;
-      const chg = g.data.market_cap_change_percentage_24h_usd;
-      document.getElementById('pMCAP').textContent = mc ? '$' + (mc/1e12).toFixed(2) + 'T' : '—';
-      const el = document.getElementById('cMCAP');
-      el.textContent = chg ? pct(chg) + ' 24h' : '';
-      el.className = 'pc ' + (chg >= 0 ? 'u' : 'd');
+    const r = await fetch('https://api.alternative.me/fng/?limit=1');
+    const f = await r.json();
+    if(f.data && f.data[0] && !String($('pFG').textContent).includes('/')) {
+      $('pFG').textContent = f.data[0].value+'/100';
+      $('cFG').textContent = f.data[0].value_classification;
+      const v=parseInt(f.data[0].value);
+      $('cFG').className='pc '+(v>60?'u':v<30?'d':'f');
     }
-  } catch(e) {}
-
+  } catch(e){}
   try {
-    const r3 = await fetch('https://api.alternative.me/fng/?limit=1');
-    const f = await r3.json();
-    if(f.data && f.data[0]) {
-      const val = parseInt(f.data[0].value);
-      const lbl = f.data[0].value_classification;
-      document.getElementById('pFG').textContent = val + ' / 100';
-      const el = document.getElementById('cFG');
-      el.textContent = lbl;
-      el.className = 'pc ' + (val > 50 ? 'u' : val < 30 ? 'd' : 'f');
-      document.getElementById('fgBar').style.display = 'flex';
-      document.getElementById('fgNeedle').style.left = val + '%';
+    const r = await fetch('https://api.gold-api.com/price/XAU');
+    const g = await r.json();
+    if(g.price) $('pGOLD').textContent = '$'+Number(g.price).toLocaleString('en-US',{maximumFractionDigits:2});
+  } catch(e){ $('pGOLD').textContent='--'; }
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/global');
+    const g = await r.json();
+    if(g.data && g.data.total_market_cap && g.data.total_market_cap.usd) {
+      $('pMCAP').textContent = '$'+(g.data.total_market_cap.usd/1e12).toFixed(2)+'T';
+      const chg=g.data.market_cap_change_percentage_24h_usd;
+      $('cMCAP').textContent=(chg>=0?'+':'')+chg.toFixed(2)+'% 24h';
+      $('cMCAP').className='pc '+(chg>=0?'u':'d');
     }
-  } catch(e) {}
-
-  try {
-    const r4 = await fetch('https://api.gold-api.com/price/XAU');
-    const g = await r4.json();
-    if(g.price) document.getElementById('pGOLD').textContent = fmt(g.price);
-  } catch(e) {
-
-    document.getElementById('pGOLD').textContent = 'API unavailable';
-  }
+  } catch(e){}
+  $('priceUpdated').textContent = 'Prices: '+new Date().toLocaleTimeString();
 }
 
-function updateTime() {
-  document.getElementById('ts').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+async function refreshAll() {
+  await Promise.all([loadDeskData(), loadPrices()]);
+  $('ts').textContent = 'Updated '+new Date().toLocaleTimeString();
 }
-
-async function loadAll() {
-  await loadPrices();
-  updateTime();
-}
-
-loadAll();
-setInterval(loadAll, 60000);
+refreshAll();
+setInterval(refreshAll, 60000);
 </script>
 </body>
 </html>
