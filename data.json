@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T12:33:03.981135+00:00",
+  "generated_at": "2026-04-13T13:01:42.677801+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -267,6 +267,13 @@
     "*No debates yet \u2014 first week starts Mon Apr 14, 2026*"
   ],
   "reports": [
+    {
+      "filename": "pre-market-2026-04-13.md",
+      "title": "\ud83c\udf05 PRE-MARKET BRIEFING \u2014 Monday, April 13, 2026",
+      "type": "morning",
+      "date": "2026-04-13 13:01 UTC",
+      "preview": "# \ud83c\udf05 PRE-MARKET BRIEFING \u2014 Monday, April 13, 2026\n\n*Generated: 2026-04-13 13:00 UTC | Desk Status: ACTIVE | Cash: $15,000 | Open Positions: 0*\n\n---\n\n## \ud83c\udf0d Overnight Snapshot\n\n| Asset | Price | 24h Change | Signal |\n|-------|-------|------------|--------|\n| **BTC** | $71,119 | -0.04% | \ud83d\udfe1 Flat \u2014 consolidating |\n| **ETH** | $2,193 | -0.15% | \ud83d\udfe1 Flat \u2014 slight bleed |\n| **SOL** | $82.50 | +0.48% | \ud83d\udfe2 Mild outperformance |\n| **Gold (XAU)** | $4,724 | \u2014 | \ud83d\udd25 Multi-year high \u2014 safe haven bid STRONG |\n\n**Crypto Fear & Greed Index: 12 \u2014 EXTREME FEAR** \ud83d\udd34\n\nKey reads:\n- Gold at $4,724 is extraordinary. Safe hav"
+    },
     {
       "filename": "debate-history.md",
       "title": "Debate History Archive",
