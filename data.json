@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T19:31:50.617865+00:00",
+  "generated_at": "2026-04-13T20:01:09.776544+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -130,8 +130,8 @@
   "sentiment": {
     "fear_greed_value": null,
     "fear_greed_label": null,
-    "market_regime": "Geopolitical Crisis / Risk-Off",
-    "overall": "Bearish"
+    "market_regime": "Risk-Off Recovery",
+    "overall": "Neutral"
   },
   "control": {
     "trading_active": true,
