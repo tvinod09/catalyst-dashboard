@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T16:31:34.799002+00:00",
+  "generated_at": "2026-04-13T17:00:41.477656+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -130,7 +130,7 @@
   "sentiment": {
     "fear_greed_value": null,
     "fear_greed_label": null,
-    "market_regime": "Geopolitical Risk / War Premium \u2014 US Hormuz blockade active; oil above $100; equities showing resilience but fear elevated",
+    "market_regime": "Risk-Off / Geopolitical Shock",
     "overall": "Bearish"
   },
   "control": {
