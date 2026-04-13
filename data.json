@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T13:01:42.677801+00:00",
+  "generated_at": "2026-04-13T13:01:58.094344+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -236,8 +236,8 @@
   "sentiment": {
     "fear_greed_value": null,
     "fear_greed_label": null,
-    "market_regime": "Unknown",
-    "overall": "Neutral"
+    "market_regime": "Risk-Off \u2014 Oil shock driving broad equity selloff; Iran conflict escalating, Hormuz blockade fears pushing crude above $100; Goldman earnings dragged by war-related exposure",
+    "overall": "Bearish"
   },
   "control": {
     "trading_active": true,
