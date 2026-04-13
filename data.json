@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T17:00:41.477656+00:00",
+  "generated_at": "2026-04-13T17:32:11.530992+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -161,6 +161,13 @@
     "*No debates yet \u2014 first week starts Mon Apr 14, 2026*"
   ],
   "reports": [
+    {
+      "filename": "mid-day-2026-04-13.md",
+      "title": "\u2600\ufe0f MID-DAY CHECK \u2014 Monday, April 13, 2026 \u2014 12:30 PM ET",
+      "type": "midday",
+      "date": "2026-04-13 17:32 UTC",
+      "preview": "# \u2600\ufe0f MID-DAY CHECK \u2014 Monday, April 13, 2026 \u2014 12:30 PM ET\n\n---\n\n## \ud83d\udcbc Open Positions Status\n\n**No open positions.** Portfolio is 100% cash ($15,000).\n\n| Metric | Value |\n|---|---|\n| Cash | $15,000.00 |\n| Unrealized P&L | $0.00 |\n| Realized P&L | $0.00 |\n| Positions | 0 of 6 max |\n| Risk Score | 1/10 (No exposure) |\n\nFlat into a high-volatility geopolitical tape \u2014 correct posture given current regime.\n\n---\n\n## \ud83d\udcca Market Pulse\n\n**Regime: Risk-Off / Geopolitical Shock | Fear & Greed: 12 \u2014 Extreme Fear**\n\nMarkets are in a fragile stabilization phase. The US-Iran Hormuz blockade has injected extreme "
+    },
     {
       "filename": "postmortem-2026-04.md",
       "title": "\ud83d\udd2c MONTHLY POST-MORTEM \u2014 APRIL 2026",
