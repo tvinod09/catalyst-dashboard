@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13T20:01:09.776544+00:00",
+  "generated_at": "2026-04-13T20:31:08.918733+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -161,6 +161,13 @@
     "*No debates yet \u2014 first week starts Mon Apr 14, 2026*"
   ],
   "reports": [
+    {
+      "filename": "daily-report-2026-04-13.md",
+      "title": "\ud83d\udcca DAILY TRADING REPORT \u2014 Monday, April 13, 2026",
+      "type": "daily",
+      "date": "2026-04-13 20:30 UTC",
+      "preview": "# \ud83d\udcca DAILY TRADING REPORT \u2014 Monday, April 13, 2026\n\n> Generated: 2026-04-13 8:30 PM UTC (4:30 PM ET)\n> Data source: portfolio.json (last sync: 2026-04-12) | suggestions_log.json (latest cycle: 2026-04-11)\n\n---\n\n## \ud83d\udcbc Portfolio Summary\n\n| Metric | Value |\n|---|---|\n| **Total Value** | $15,000.00 |\n| **Cash** | $15,000.00 |\n| **Invested** | $0.00 |\n| **Realized P&L** | $0.00 (0.00%) |\n| **Unrealized P&L** | $0.00 |\n| **Total Fees Paid** | $0.00 |\n| **Est. Tax Liability** | $0.00 |\n\n> \u26a0\ufe0f **Note:** `portfolio.json` reflects a clean/reset state as of 2026-04-12. The April 11 suggestion cycle executed"
+    },
     {
       "filename": "mid-day-2026-04-13.md",
       "title": "\u2600\ufe0f MID-DAY CHECK \u2014 Monday, April 13, 2026 \u2014 12:30 PM ET",
