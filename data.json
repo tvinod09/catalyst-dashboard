@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T17:31:32.452791+00:00",
+  "generated_at": "2026-04-14T17:32:18.111326+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -161,6 +161,13 @@
     "*No debates yet \u2014 first week starts Mon Apr 14, 2026*"
   ],
   "reports": [
+    {
+      "filename": "mid-day-2026-04-14.md",
+      "title": "\u2600\ufe0f MID-DAY CHECK \u2014 April 14, 2026 \u00b7 12:30 PM ET",
+      "type": "midday",
+      "date": "2026-04-14 17:31 UTC",
+      "preview": "# \u2600\ufe0f MID-DAY CHECK \u2014 April 14, 2026 \u00b7 12:30 PM ET\n\n## \ud83d\udcbc Open Positions Status\n\n**No open positions.** Portfolio is fully in cash.\n\n| Metric | Value |\n|---|---|\n| Cash | $15,000.00 |\n| Unrealized P&L | $0.00 |\n| Realized P&L | $0.00 |\n| Positions | 0 / 6 max |\n\nPortfolio capacity: 5\u20136 positions available. All capital is dry powder.\n\n---\n\n## \ud83d\udcca Market Pulse\n\n\ud83d\udd34 **Regime: Risk-Off / Geopolitical Stress** \u2014 Fear & Greed at 21 (Extreme Fear)\n\nIran-Hormuz blockade is rattling energy markets, with crude convulsing upward and shipping routes disrupted. Heavyweight capital (Einhorn/Greenlight) is openly "
+    },
     {
       "filename": "pre-market-2026-04-14.md",
       "title": "\ud83c\udf05 PRE-MARKET BRIEFING \u2014 Tuesday, April 14, 2026",
