@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T19:31:39.470230+00:00",
+  "generated_at": "2026-04-14T20:00:45.794019+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -130,8 +130,8 @@
   "sentiment": {
     "fear_greed_value": null,
     "fear_greed_label": null,
-    "market_regime": "Risk-Off / Geopolitical Stress",
-    "overall": "Bearish"
+    "market_regime": "Geopolitical Risk / Energy Shock \u2014 Iran Hormuz blockade disrupting oil supply; bond yields elevated; market staging relief rally on diplomacy hopes",
+    "overall": "Neutral"
   },
   "control": {
     "trading_active": true,
