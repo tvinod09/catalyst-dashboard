@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T17:32:18.111326+00:00",
+  "generated_at": "2026-04-14T18:00:47.235575+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -130,7 +130,7 @@
   "sentiment": {
     "fear_greed_value": null,
     "fear_greed_label": null,
-    "market_regime": "Risk-Off / Geopolitical Stress",
+    "market_regime": "Risk-Off / Extreme Fear \u2014 market in relief-rally mode off deeply oversold levels; macro uncertainty (tariffs, geopolitics) remains elevated; short-term bounces possible but structural headwinds intact",
     "overall": "Bearish"
   },
   "control": {
