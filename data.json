@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14T12:33:02.624680+00:00",
+  "generated_at": "2026-04-14T13:01:20.936220+00:00",
   "portfolio": {
     "cash": 15000.0,
     "realized_pnl": 0.0,
@@ -161,6 +161,13 @@
     "*No debates yet \u2014 first week starts Mon Apr 14, 2026*"
   ],
   "reports": [
+    {
+      "filename": "pre-market-2026-04-14.md",
+      "title": "\ud83c\udf05 PRE-MARKET BRIEFING \u2014 Tuesday, April 14, 2026",
+      "type": "morning",
+      "date": "2026-04-14 13:01 UTC",
+      "preview": "# \ud83c\udf05 PRE-MARKET BRIEFING \u2014 Tuesday, April 14, 2026\n\n*Generated: 2026-04-14 13:00 UTC | Catalyst Trading Desk*\n\n---\n\n## \ud83c\udf0d Overnight Snapshot\n\n| Asset | Price | 24h Change |\n|-------|-------|-----------|\n| **BTC** | $74,435 | \u25b2 +4.67% |\n| **ETH** | $2,374 | \u25b2 +8.24% |\n| **SOL** | $85.93 | \u25b2 +4.28% |\n| **Gold (XAU)** | $4,771 | (intraday, ~+1% vs prior $4,724) |\n\n**Crypto Read:** Bounce off extreme fear lows \u2014 BTC reclaiming $74K with ETH leading (+8.2% outperformance notable). This is likely a relief/dead-cat bounce within the broader REGIME 8 Crypto Bear. F&G still deeply in Extreme Fear at **21"
+    },
     {
       "filename": "daily-report-2026-04-13.md",
       "title": "\ud83d\udcca DAILY TRADING REPORT \u2014 Monday, April 13, 2026",
